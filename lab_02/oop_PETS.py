@@ -1,0 +1,99 @@
+from abc import ABC, abstractmethod
+
+#Интерфейс Pet
+class Pet(ABC):
+    @abstractmethod
+    def express(self):
+        pass
+    @abstractmethod
+    def getName(self) -> str:
+        pass
+    @abstractmethod
+    def getAge(self) -> int:
+        pass
+    @abstractmethod
+    def getAgeInHumanYears(self) -> int:
+        pass
+
+
+#Абстрактный класс Animal
+class Animal(Pet, ABC):
+    def __init__(self, name: str, age: int):
+        self.name = name
+        self.age = age
+    def happyBirthday(self):
+        self.age += 1
+    def getName(self) -> str:
+        return self.name
+    def getAge(self) -> int:
+        return self.age
+
+    @abstractmethod
+    def express(self):
+        pass
+    @abstractmethod
+    def getAgeInHumanYears(self) -> int:
+        pass
+
+
+#Класс Parrot
+class Parrot(Animal):
+    def express(self):
+        return f'{self.getName()}: "ПРИВЕТ!"'
+    def getAgeInHumanYears(self) -> int:
+        #1 год попугая = 5 человеческим
+        return self.getAge() * 5
+
+
+#Класс Turtle
+class Turtle(Animal):
+    def express(self):
+        return f'{self.getName()}: "И ЧТО МНЕ ТУТ ПИСАТЬ, ЧЕРЕПАХИ НЕ РАЗГОВАРИВАЮТ..."'
+    def getAgeInHumanYears(self) -> int:
+        #1 год черепахи = 5.25 человеческим (как в примере 4 -> 21)
+        return int(self.getAge() * 5.25)
+
+
+#Класс Person
+class Person:
+    def __init__(self, name: str, pet: Pet = None):
+        self.name = name
+        self.pet = pet
+    def setPet(self, pet: Pet):
+        self.pet = pet
+    
+    def getPetInfo(self):
+        print("-----------------------")
+        if self.pet is None:
+            print(f"{self.name} пока без питомца")
+        else:
+            print(f"Питомца у {self.name} зовут {self.pet.getName()}")
+            print(f"Возраст: {self.pet.getAge()} года, около {self.pet.getAgeInHumanYears()} человеческих лет")
+            print("И он говорит типо:")
+            print(self.pet.express())
+        print("-----------------------")
+
+
+#Основная программа
+if __name__ == "__main__":
+    
+    #Создаем людей
+    jack = Person("Jack")
+    john = Person("John")
+
+    #Создаем питомцев
+    kesha = Parrot("Kesha", 3)
+    zavala = Turtle("Zavala", 4)
+
+    #Привязываем питомцев
+    jack.setPet(kesha)
+
+    #Вызываем метод для Джека с питомцем
+    jack.getPetInfo()
+
+    #Вызываем метод для Джона без питомца
+    john.getPetInfo()
+
+    #Привязываем питомца Джону и снова вызываем
+    john.setPet(zavala)
+    john.getPetInfo()
