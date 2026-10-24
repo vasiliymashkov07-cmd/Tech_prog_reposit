@@ -19,14 +19,14 @@ class Pet(ABC):
 #Абстрактный класс Animal
 class Animal(Pet, ABC):
     def __init__(self, name: str, age: int):
-        self.name = name
-        self.age = age
+        self._name = name
+        self._age = age
     def happyBirthday(self):
-        self.age += 1
+        self_age += 1
     def getName(self) -> str:
-        return self.name
+        return self._name
     def getAge(self) -> int:
-        return self.age
+        return self._age
 
     @abstractmethod
     def express(self):
@@ -57,20 +57,20 @@ class Turtle(Animal):
 #Класс Person
 class Person:
     def __init__(self, name: str, pet: Pet = None):
-        self.name = name
-        self.pet = pet
+        self._name = name
+        self._pet = pet
     def setPet(self, pet: Pet):
-        self.pet = pet
+        self._pet = pet
     
     def getPetInfo(self):
         print("-----------------------")
-        if self.pet is None:
-            print(f"{self.name} пока без питомца")
+        if self._pet is None:
+            print(f"{self._name} пока без питомца")
         else:
-            print(f"Питомца у {self.name} зовут {self.pet.getName()}")
-            print(f"Возраст: {self.pet.getAge()} года, около {self.pet.getAgeInHumanYears()} человеческих лет")
+            print(f"Питомца у {self._name} зовут {self._pet.getName()}")
+            print(f"Возраст: {self._pet.getAge()} года, около {self._pet.getAgeInHumanYears()} человеческих лет")
             print("И он говорит типо:")
-            print(self.pet.express())
+            print(self._pet.express())
         print("-----------------------")
 
 
