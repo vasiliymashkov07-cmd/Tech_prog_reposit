@@ -124,7 +124,7 @@ if __name__ == "__main__":
 Из корня репозитория:
 
 ```
-python -m lab_03.demo   # показать все 5 паттернов
+python -m lab_03.demo   # все 5 паттернов
 python -m lab_03.main   # сама игра
 ```
 
