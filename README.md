@@ -131,12 +131,11 @@ python -m lab_03.main   # сама игра
 
 # Паттерны
 
-| Паттерн  | Где |
-| Одиночка | `core/dice.py` |
-| Прототип | `item/item.py`, `item/item_catalog.py` |
-| Абстрактная фабрика | `kit/` |
-| Строитель | `hero/hero.py` |
-| Фабричный метод | `world/location.py` + `forest.py`, `crypt.py`, `dragon_lair.py` |
+Одиночка `core/dice.py`
+Прототип `item/item.py`, `item/item_catalog.py` 
+Абстрактная фабрика `kit/` 
+Строитель `hero/hero.py` 
+Фабричный метод `world/location.py` + `forest.py`, `crypt.py`, `dragon_lair.py` 
 
 # Структура
 
