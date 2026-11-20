@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 
 from .hit import Hit
+from ..defense.damage import Damage
 
 
 # всё, что может участвовать в бою: и герой, и враги
@@ -34,4 +35,4 @@ class Combatant(ABC):
 
     # получение удара, возвращает урон, который прошел на самом деле
     @abstractmethod
-    def receive_hit(self, damage: int) -> int: ...
+    def receive_hit(self, damage: int) -> Damage: ...

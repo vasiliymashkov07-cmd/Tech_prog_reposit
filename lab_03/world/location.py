@@ -11,6 +11,11 @@ from ..item.item import Item
 from ..item.item_catalog import ItemCatalog
 from .expedition_report import ExpeditionReport
 from .rewards import Rewards
+from ..enemy.armored_enemy import ArmoredEnemy
+from ..enemy.legendary_enemy import LegendaryEnemy
+from ..enemy.windfury_enemy import WindfuryEnemy
+from ..tactic.tactic import Tactic
+from ..tactic.balanced_tactic import BalancedTactic
 
 LOOT_CHANCE = 0.6
 ENCHANT_CHANCE = 0.3
@@ -35,22 +40,25 @@ class Location(ABC):
 
     # бизнес-логика, общая для всех локаций:
     # герой встречает врага, сражается с ним и получает награду, если победил
-    def explore(self, hero: Hero, seed: int | None = None) -> ExpeditionReport:
+    def explore(self, hero: Hero, seed: int | None = None, tactic: Tactic | None = None) -> ExpeditionReport:
         dice = Dice()
         if seed is None:
             seed = dice.next_seed()
         dice.reseed(seed)
 
-        hero.restore_health()
+        tactic = tactic if tactic is not None else BalancedTactic()
+        hero.rest()
         enemy = self._create_enemy()
-        battle = Battle(hero, enemy).run()
+        if dice.chance(0.2):
+            enemy = self._make_elite(enemy, dice)
+        battle = Battle(hero, enemy, tactic).run()
 
         if battle.outcome == Outcome.VICTORY:
             rewards = self._reward(hero, enemy, dice)
         else:
             rewards = self._punish(hero)
 
-        return ExpeditionReport(seed, self._code, battle, rewards)
+        return ExpeditionReport(seed, self._code, tactic.code, battle, rewards)
 
     def _reward(self, hero: Hero, enemy: Enemy, dice: Dice) -> Rewards:
         experience = enemy.experience_reward
@@ -92,3 +100,15 @@ class Location(ABC):
     @property
     def recommended_level(self) -> int:
         return self._recommended_level
+
+    def _make_elite(self, enemy: Enemy, dice: Dice) -> Enemy:
+        both = dice.chance(0.25)
+        if dice.chance(0.5):
+            enemy = LegendaryEnemy(enemy)
+            if both:
+                enemy = WindfuryEnemy(enemy)
+        else:
+            enemy = WindfuryEnemy(enemy)
+            if both:
+                enemy = LegendaryEnemy(enemy)
+        return ArmoredEnemy(enemy) if dice.chance(0.3) else enemy

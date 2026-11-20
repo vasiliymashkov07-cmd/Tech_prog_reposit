@@ -9,5 +9,6 @@ from .rewards import Rewards
 class ExpeditionReport:
     seed: int
     location_code: str
+    tactic_code: str
     battle: BattleReport
     rewards: Rewards

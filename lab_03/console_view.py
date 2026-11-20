@@ -34,6 +34,13 @@ class ConsoleView:
         print("  Оружие: " + self.describe(hero.weapon))
         print("  Броня:  " + self.describe(hero.armor))
 
+        if hero.achievements:
+            print("  Достижения: " + ", ".join(a.display_name for a in hero.achievements))
+
+    def summarize(self, report: ExpeditionReport, location_name: str, tactic_name: str) -> str:
+        result = "победа" if report.battle.outcome == Outcome.VICTORY else "поражение"
+        return f'{location_name}, {report.battle.enemy.name}, тактика "{tactic_name}": {result}'
+
     def print_report(self, report: ExpeditionReport, location_name: str) -> None:
         battle = report.battle
         print(f"=== {location_name} (сид {report.seed}) ===")
@@ -58,6 +65,16 @@ class ConsoleView:
                 f"[раунд {event.round}] {source.name} -> {target.name}: КРИТ! {event.amount} урона, "
                 f"осталось {event.target_health_after}/{target.max_health}"
             )
+        elif event.type == EventType.EVADE:
+            print(f"[раунд {event.round}] {source.name} -> {target.name}: промах, {target.name} уклоняется")
+        elif event.type == EventType.ABSORB:
+            print(
+                f"[раунд {event.round}] {source.name} -> {target.name}: барьер поглощает {event.amount} урона"
+            )
+        elif event.type == EventType.POWER_STRIKE:
+            print(f"[раунд {event.round}] {source.name} бьет в полную силу")
+        elif event.type == EventType.DEFEND:
+            print(f"[раунд {event.round}] {source.name} уходит в оборону")
         elif event.type == EventType.DEATH:
             print(f"{target.name} повержен!")
 
