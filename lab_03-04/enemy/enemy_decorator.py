@@ -3,8 +3,10 @@ from ..defense.damage import Damage
 from .enemy import Enemy
 
 
+# Общая обёртка для усилений врага.
 class EnemyDecorator(Enemy):
     def __init__(self, wrapped: Enemy) -> None:
+        # Внутри может быть как враг, так и другой декоратор.
         self._wrapped = wrapped
 
     @property
@@ -30,9 +32,11 @@ class EnemyDecorator(Enemy):
     def is_alive(self) -> bool:
         return self._wrapped.is_alive()
 
+    # По умолчанию передаём расчёт удара дальше.
     def roll_damage(self) -> Hit:
         return self._wrapped.roll_damage()
 
+    # Получение урона тоже делегируем обёрнутому объекту.
     def receive_hit(self, amount: int) -> Damage:
         return self._wrapped.receive_hit(amount)
 
